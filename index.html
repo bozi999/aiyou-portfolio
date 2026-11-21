@@ -10,60 +10,127 @@
 <body>
   <header class="site-header">
     <nav class="nav container" aria-label="Main navigation">
-      <a class="logo" href="#">Aiyou</a>
+      <a class="logo" href="#">★ Aiyou</a>
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a class="nav-pill pill-pink" href="#about">About</a></li>
+        <li><a class="nav-pill pill-yellow" href="#projects">Projects</a></li>
+        <li><a class="nav-pill pill-mint" href="#contact">Contact</a></li>
       </ul>
     </nav>
   </header>
 
   <main class="container">
-    <section class="hero">
-      <h1>Hi, I'm Aiyou.</h1>
-      <p class="tagline">I create simple, thoughtful work — and this is where I share it.</p>
-      <a class="button" href="#projects">View my work</a>
+    <section class="hero card-pop">
+      <div class="deco deco-star" aria-hidden="true">★</div>
+      <div class="deco deco-circle" aria-hidden="true"></div>
+      <div class="deco deco-squiggle" aria-hidden="true">〰</div>
+      <p class="badge">✿ Welcome to my little corner ✿</p>
+      <h1>Hi, I'm Aiyou!</h1>
+      <p class="tagline">I create fun, thoughtful work — and this is where I share it.</p>
+      <div class="mascots">
+        <video id="mascotVideo" class="mascot-video" muted loop playsinline preload="auto" poster="assets/mascots-3d.webp">
+          <source src="assets/mascots-3d.mp4" type="video/mp4">
+          <img src="assets/mascots-3d.webp" alt="Cute 3D cat, bunny and robot characters">
+        </video>
+      </div>
+      <a class="button" href="#projects">See my work →</a>
     </section>
 
-    <section id="about" class="section">
-      <h2>About</h2>
+    <section id="about" class="section card-pop card-about">
+      <h2><span class="sticker sticker-pink">About</span></h2>
       <p>
-        Welcome to my portfolio. I'm Aiyou, a creator interested in design,
+        Welcome to my portfolio! I'm Aiyou, a creator interested in design,
         technology, and visual storytelling. This page is a starting point —
         replace this text with your own story, experience, and what you love to do.
       </p>
     </section>
 
     <section id="projects" class="section">
-      <h2>Projects</h2>
+      <h2><span class="sticker sticker-yellow">Projects</span></h2>
       <div class="projects-grid">
-        <article class="card">
+        <article class="card card-1">
+          <div class="card-emoji" aria-hidden="true">🎨</div>
           <h3>Project One</h3>
           <p>A short description of your first project. What it is, what you did, and why it matters.</p>
         </article>
-        <article class="card">
+        <article class="card card-2">
+          <div class="card-emoji" aria-hidden="true">🚀</div>
           <h3>Project Two</h3>
           <p>A short description of your second project. Add a link here when the project is online.</p>
         </article>
-        <article class="card">
+        <article class="card card-3">
+          <div class="card-emoji" aria-hidden="true">🌈</div>
           <h3>Project Three</h3>
           <p>A short description of your third project. Keep it brief — one or two sentences is enough.</p>
         </article>
       </div>
     </section>
 
-    <section id="contact" class="section">
-      <h2>Contact</h2>
+    <section id="contact" class="section card-pop card-contact">
+      <h2><span class="sticker sticker-mint">Contact</span></h2>
       <p>Want to work together or just say hello? Reach me on GitHub or by email.</p>
-      <p><a class="button button-outline" href="https://github.com/">GitHub</a></p>
+      <p><a class="button button-alt" href="https://github.com/bozi999">GitHub ↗</a></p>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container">
-      <p>&copy; 2026 Aiyou. All rights reserved.</p>
+      <p>© 2026 Aiyou ★ Made with a smile</p>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      var video = document.getElementById('mascotVideo');
+      if (!video) return;
+      var hero = video.closest('.hero');
+      var PLAY_DISTANCE = 420; // px: start moving when the mouse gets this close
+
+      function distanceToVideo(x, y) {
+        var r = video.getBoundingClientRect();
+        var cx = r.left + r.width / 2;
+        var cy = r.top + r.height / 2;
+        return Math.hypot(x - cx, y - cy);
+      }
+
+      function onMove(e) {
+        var x = e.clientX, y = e.clientY;
+        var r = video.getBoundingClientRect();
+        var cx = r.left + r.width / 2;
+        var cy = r.top + r.height / 2;
+        var d = distanceToVideo(x, y);
+
+        if (d < PLAY_DISTANCE) {
+          if (video.paused) video.play().catch(function () {});
+          // Lean a little toward the mouse, more as it gets closer
+          var strength = 1 - d / PLAY_DISTANCE;
+          var tiltY = ((x - cx) / r.width) * 8 * strength;
+          var tiltX = -((y - cy) / r.height) * 6 * strength;
+          var scale = 1 + 0.03 * strength;
+          video.style.transform =
+            'perspective(700px) rotateX(' + tiltX.toFixed(2) + 'deg) rotateY(' +
+            tiltY.toFixed(2) + 'deg) scale(' + scale.toFixed(3) + ')';
+        } else {
+          if (!video.paused) video.pause();
+          video.style.transform = '';
+        }
+      }
+
+      function onLeave() {
+        if (!video.paused) video.pause();
+        video.style.transform = '';
+      }
+
+      // Watch the whole hero area, not just the video itself
+      (hero || video).addEventListener('mousemove', onMove);
+      (hero || video).addEventListener('mouseleave', onLeave);
+
+      // Touch devices have no mouse: tap to play / pause
+      video.addEventListener('click', function () {
+        if (video.paused) video.play().catch(function () {});
+        else video.pause();
+      });
+    })();
+  </script>
 </body>
 </html>

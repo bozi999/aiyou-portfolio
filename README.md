@@ -1,6 +1,6 @@
 # Aiyou — Personal Portfolio
 
-A simple, minimalist personal portfolio website built with plain HTML and CSS.
+A fun, cartoon-style personal portfolio website built with plain HTML and CSS.
 Responsive for mobile.
 
 ## Files
